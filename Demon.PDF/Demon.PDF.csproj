@@ -1,0 +1,80 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{9FAE46DB-8377-4A17-AA54-04AE3FC17A91}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Demon.PDF</RootNamespace>
+    <AssemblyName>Demon.PDF</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>full</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DebugSymbols>true</DebugSymbols>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Drawing" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Catalog.cs" />
+    <Compile Include="Color.cs" />
+    <Compile Include="Content.cs" />
+    <Compile Include="DocInfoDict.cs" />
+    <Compile Include="Document.cs" />
+    <Compile Include="Compress.cs" />
+    <Compile Include="Font.cs" />
+    <Compile Include="FontCache.cs" />
+    <Compile Include="Helpers.cs" />
+    <Compile Include="Image.cs" />
+    <Compile Include="ObjectReference.cs" />
+    <Compile Include="Page.cs" />
+    <Compile Include="Path.cs" />
+    <Compile Include="ProcSet.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Rectangle.cs" />
+    <Compile Include="Text.cs" />
+    <Compile Include="TrueTypeFont.cs" />
+    <Compile Include="Type0Font.cs" />
+    <Compile Include="Type1Font.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Demon.Font\Demon.Font.csproj">
+      <Project>{a3ffdbeb-798b-4a64-a695-9a3bd734a64a}</Project>
+      <Name>Demon.Font</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Demon.Report.Types\Demon.Report.Types.csproj">
+      <Project>{994f27f0-6265-4e9e-94ee-e721dd52578b}</Project>
+      <Name>Demon.Report.Types</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

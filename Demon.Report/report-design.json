@@ -1,0 +1,1055 @@
+﻿{
+	"$schema": "http://www.demoninspect.com/schemas/report-design",
+	"definitions":
+	{
+		/*
+			JSON schemas don't do inheritance. To be fair, that's because they define constraints,
+			not object structures. We'd like to define common layout attributes here and reuse
+			them in the various layout definitions, and that can work quite nicely in itself,
+			but it has the side effect that we can't use additionalProperties:false to detect
+			undefined properties. We need to be able to do that so that we can detect when
+			a property name is mis-spelled, because otherwise the design file would pass
+			validation but it wouldn't behave as the designer expected. Catching errors like
+			that is more important than avoiding re-definition of the common properties on every
+			layout type. So we just go ahead and define them explicitly in every layout type.
+
+		"commonlayoutattributes":
+		{
+			"type": "object",
+			"properties":
+			{
+				"id": { "type": "string" },
+				"name": { "type": "string" },
+				"source": { "$ref": "#/definitions/path" },
+				"traceLayout": { "type": "boolean" },
+				"traceText": { "type": "boolean" },
+				"tracePath": { "type": "boolean" },
+				"traceOutline": { "type": "boolean" }
+			}
+		},
+		*/
+
+		"ChapterLayout":
+		{
+			"type": "object",
+			"properties":
+			{
+				"LayoutType": { "const": "ChapterLayout" },
+				"Background": { "type": "array", "items": { "$ref": "#/definitions/fixed_picture" } },
+				"Overlay": { "type": "array", "items": { "$ref": "#/definitions/fixed_picture" } },
+				"Layouts":
+				{
+					"type": "array",
+					"items":
+					{
+						"anyOf":
+						[
+							{ "$ref": "#/definitions/GroupLayout" },
+							{ "$ref": "#/definitions/TextLayout" },
+							{ "$ref": "#/definitions/ListLayout" },
+							{ "$ref": "#/definitions/TableLayout" },
+							{ "$ref": "#/definitions/PhotoTableLayout" },
+							{ "$ref": "#/definitions/PictureLayout" },
+							{ "$ref": "#/definitions/LineLayout" },
+							{ "$ref": "#/definitions/SpaceLayout" }
+						]
+					}
+				},
+				"TermDictionary": { "$ref": "#/definitions/termdictionary" },
+				"Header":
+				{
+					"type": "object",
+					"properties": { "GroupLayout": { "$ref": "#/definitions/GroupLayout" } }
+				},
+				"Footer":
+				{
+					"type": "object",
+					"properties": { "GroupLayout": { "$ref": "#/definitions/GroupLayout" } }
+				},
+				"PageMetrics":
+				{
+					"type": "object",
+					"properties":
+					{
+						"MediaBox": { "$ref": "#/definitions/rectangle" },
+						"BodyBox": { "$ref": "#/definitions/rectangle" },
+						"HeaderBox": { "$ref": "#/definitions/rectangle" },
+						"FooterBox": { "$ref": "#/definitions/rectangle" }
+					},
+					"required": [ "MediaBox", "BodyBox", "HeaderBox", "FooterBox" ]
+				},
+//				"anyOf": { "$ref": "#/definitions/commonlayoutattributes" },
+				"id": { "type": "string" },
+				"parentid": { "type": "string" },
+				"ordinal": { "type": "number" },
+				"name": { "type": "string" },
+				"lineNumber": { "type": "number" },
+				"linePosition": { "type": "number" },
+				"source": { "$ref": "#/definitions/path" },
+				"traceLayout": { "type": "boolean" },
+				"traceText": { "type": "boolean" },
+				"tracePath": { "type": "boolean" },
+				"traceOutline": { "type": "boolean" },
+				"drawRules": { "type": "boolean" },
+				"renderEmpty": { "type": "boolean" }
+			},
+			"required": [ "LayoutType", "Layouts", "PageMetrics" ],
+			"additionalProperties": false
+		},
+		"GroupLayout":
+		{
+			"type": "object",
+//			"anyOf": [{ "$ref": "#/definitions/commonlayoutattributes" }],
+			"properties":
+			{
+				"LayoutType": { "const": "GroupLayout" },
+				"Layouts":
+				{
+					"type": "array",
+					"items":
+					{
+						"anyOf":
+						[
+							{ "$ref": "#/definitions/GroupLayout" },
+							{ "$ref": "#/definitions/TextLayout" },
+							{ "$ref": "#/definitions/ListLayout" },
+							{ "$ref": "#/definitions/TableLayout" },
+							{ "$ref": "#/definitions/PhotoTableLayout" },
+							{ "$ref": "#/definitions/PictureLayout" },
+							{ "$ref": "#/definitions/LineLayout" },
+							{ "$ref": "#/definitions/SpaceLayout" }
+						]
+					}
+				},
+				"Conditions": { "$ref": "#/definitions/conditions" },
+				"PageBreakRules": { "$ref": "#/definitions/pagebreakrules" },
+				"TermDictionary": { "$ref": "#/definitions/termdictionary" },
+				"id": { "type": "string" },
+				"parentid": { "type": "string" },
+				"ordinal": { "type": "number" },
+				"name": { "type": "string" },
+				"lineNumber": { "type": "number" },
+				"linePosition": { "type": "number" },
+				"source": { "$ref": "#/definitions/path" },
+				"traceLayout": { "type": "boolean" },
+				"traceText": { "type": "boolean" },
+				"tracePath": { "type": "boolean" },
+				"traceOutline": { "type": "boolean" },
+				"drawRules": { "type": "boolean" }
+			},
+			"required": [ "LayoutType", "Layouts" ],
+			"additionalProperties": false
+		},
+		"TextLayout":
+		{
+			"type": "object",
+//			"anyOf": [{ "$ref": "#/definitions/commonlayoutattributes" }],
+			"properties":
+			{
+				"LayoutType": { "const": "TextLayout" },
+				"DefaultText": { "type": "string" },
+				"Style": { "$ref": "#/definitions/textstyle" },
+				"Conditions": { "$ref": "#/definitions/conditions" },
+				"PageBreakRules": { "$ref": "#/definitions/pagebreakrules" },
+				"TermDictionary": { "$ref": "#/definitions/termdictionary" },
+				"id": { "type": "string" },
+				"parentid": { "type": "string" },
+				"ordinal": { "type": "number" },
+				"name": { "type": "string" },
+				"lineNumber": { "type": "number" },
+				"linePosition": { "type": "number" },
+				"source": { "$ref": "#/definitions/path" },
+				"traceLayout": { "type": "boolean" },
+				"traceText": { "type": "boolean" },
+				"tracePath": { "type": "boolean" },
+				"traceOutline": { "type": "boolean" },
+				"drawRules": { "type": "boolean" }
+			},
+			"required": [ "LayoutType" ],
+			"additionalProperties": false
+		},
+		"ListLayout":
+		{
+			"type": "object",
+//			"anyOf": [{ "$ref": "#/definitions/commonlayoutattributes" }],
+			"properties":
+			{
+				"LayoutType": { "const": "ListLayout" },
+				"Layouts":
+				{
+					"type": "array",
+					"items":
+					{
+						"anyOf":
+						[
+							{ "$ref": "#/definitions/GroupLayout" },
+							{ "$ref": "#/definitions/TextLayout" },
+							{ "$ref": "#/definitions/ListLayout" },
+							{ "$ref": "#/definitions/TableLayout" },
+							{ "$ref": "#/definitions/PhotoTableLayout" },
+							{ "$ref": "#/definitions/PictureLayout" },
+							{ "$ref": "#/definitions/LineLayout" },
+							{ "$ref": "#/definitions/SpaceLayout" }
+						]
+					}
+				},
+				"EmptyText": { "type": "string" },
+				"Style": { "$ref": "#/definitions/liststyle" },
+				"EmptyStyle": { "$ref": "#/definitions/liststyle" },
+				"Conditions": { "$ref": "#/definitions/conditions" },
+				"PageBreakRules": { "$ref": "#/definitions/pagebreakrules" },
+				"TermDictionary": { "$ref": "#/definitions/termdictionary" },
+				"merge": { "type": "boolean" },
+				"id": { "type": "string" },
+				"parentid": { "type": "string" },
+				"ordinal": { "type": "number" },
+				"name": { "type": "string" },
+				"lineNumber": { "type": "number" },
+				"linePosition": { "type": "number" },
+				"source": { "$ref": "#/definitions/path" },
+				"traceLayout": { "type": "boolean" },
+				"traceText": { "type": "boolean" },
+				"tracePath": { "type": "boolean" },
+				"traceOutline": { "type": "boolean" },
+				"drawRules": { "type": "boolean" }
+			},
+			"required": [ "LayoutType" ],
+			"additionalProperties": false
+		},
+		"TableLayout":
+		{
+			"type": "object",
+//			"anyOf": [{ "$ref": "#/definitions/commonlayoutattributes" }],
+			"properties":
+			{
+				"LayoutType": { "const": "TableLayout" },
+				"Layouts":
+				{
+					"type": "array",
+					"items": { "$ref": "#/definitions/TableRowLayout" }
+				},
+				"ColumnDefinitions": {
+					"type": "array",
+					"items": {
+						"ColumnDefinition": {
+							"Width": { "type": "number" }
+						}
+					}
+				},
+				"Style": { "$ref": "#/definitions/tablestyle" },
+				"Conditions": { "$ref": "#/definitions/conditions" },
+				"PageBreakRules": { "$ref": "#/definitions/pagebreakrules" },
+				"TermDictionary": { "$ref": "#/definitions/termdictionary" },
+				"headerRows": { "type": "integer", "minimum": 0 },
+				"id": { "type": "string" },
+				"parentid": { "type": "string" },
+				"ordinal": { "type": "number" },
+				"name": { "type": "string" },
+				"lineNumber": { "type": "number" },
+				"linePosition": { "type": "number" },
+				"source": { "$ref": "#/definitions/path" },
+				"traceLayout": { "type": "boolean" },
+				"traceText": { "type": "boolean" },
+				"tracePath": { "type": "boolean" },
+				"traceOutline": { "type": "boolean" },
+				"drawRules": { "type": "boolean" }
+			},
+			"required": [ "LayoutType" ],
+			"additionalProperties": false
+		},
+		"TableRowLayout":
+		{
+			"type": "object",
+//			"anyOf": [{ "$ref": "#/definitions/commonlayoutattributes" }],
+			"properties":
+			{
+				"LayoutType": { "const": "TableRowLayout" },
+				"Layouts":
+				{
+					"type": "array",
+					"items": { "$ref": "#/definitions/TableCellLayout" }
+				},
+				"Style": { "$ref": "#/definitions/tablerowstyle" },
+				"Conditions": { "$ref": "#/definitions/conditions" },
+				"PageBreakRules": { "$ref": "#/definitions/pagebreakrules" },
+				"TermDictionary": { "$ref": "#/definitions/termdictionary" },
+				"id": { "type": "string" },
+				"parentid": { "type": "string" },
+				"ordinal": { "type": "number" },
+				"name": { "type": "string" },
+				"lineNumber": { "type": "number" },
+				"linePosition": { "type": "number" },
+				"source": { "$ref": "#/definitions/path" },
+				"traceLayout": { "type": "boolean" },
+				"traceText": { "type": "boolean" },
+				"tracePath": { "type": "boolean" },
+				"traceOutline": { "type": "boolean" },
+				"drawRules": { "type": "boolean" }
+			},
+			"required": [ "LayoutType" ],
+			"additionalProperties": false
+		},
+		"TableCellLayout":
+		{
+			"type": "object",
+//			"anyOf": [{ "$ref": "#/definitions/commonlayoutattributes" }],
+			"properties":
+			{
+				"LayoutType": { "const": "TableCellLayout" },
+				"Layouts":
+				{
+					"type": "array",
+					"items":
+					{
+						"anyOf":
+						[
+							{ "$ref": "#/definitions/GroupLayout" },
+							{ "$ref": "#/definitions/TextLayout" },
+							{ "$ref": "#/definitions/ListLayout" },
+							{ "$ref": "#/definitions/TableLayout" },
+							{ "$ref": "#/definitions/PhotoTableLayout" },
+							{ "$ref": "#/definitions/PictureLayout" },
+							{ "$ref": "#/definitions/LineLayout" },
+							{ "$ref": "#/definitions/SpaceLayout" }
+						]
+					}
+				},
+				"Style": { "$ref": "#/definitions/tablecellstyle" },
+				"Conditions": { "$ref": "#/definitions/conditions" },
+				"PageBreakRules": { "$ref": "#/definitions/pagebreakrules" },
+				"TermDictionary": { "$ref": "#/definitions/termdictionary" },
+				"id": { "type": "string" },
+				"parentid": { "type": "string" },
+				"ordinal": { "type": "number" },
+				"name": { "type": "string" },
+				"lineNumber": { "type": "number" },
+				"linePosition": { "type": "number" },
+				"source": { "$ref": "#/definitions/path" },
+				"colSpan": { "type": "number" },
+				"traceLayout": { "type": "boolean" },
+				"traceText": { "type": "boolean" },
+				"tracePath": { "type": "boolean" },
+				"traceOutline": { "type": "boolean" },
+				"drawRules": { "type": "boolean" }
+			},
+			"required": [ "LayoutType" ],
+			"additionalProperties": false
+		},
+		"PhotoTableLayout":
+		{
+			"type": "object",
+//			"anyOf": [{ "$ref": "#/definitions/commonlayoutattributes" }],
+			"properties":
+			{
+				"LayoutType": { "const": "PhotoTableLayout" },
+				"Columns": { "type": "integer", "minimum": 0 },
+				"Merge": { "type": "boolean" },
+				"Style": { "$ref": "#/definitions/photostyle" },
+				"Conditions": { "$ref": "#/definitions/conditions" },
+				"PageBreakRules": { "$ref": "#/definitions/pagebreakrules" },
+				"id": { "type": "string" },
+				"parentid": { "type": "string" },
+				"ordinal": { "type": "number" },
+				"name": { "type": "string" },
+				"lineNumber": { "type": "number" },
+				"linePosition": { "type": "number" },
+				"source": { "$ref": "#/definitions/path" },
+				"traceLayout": { "type": "boolean" },
+				"traceText": { "type": "boolean" },
+				"tracePath": { "type": "boolean" },
+				"traceOutline": { "type": "boolean" },
+				"drawRules": { "type": "boolean" }
+			},
+			"required": [ "LayoutType" ],
+			"additionalProperties": false
+		},
+		"PictureLayout":
+		{
+			"type": "object",
+//			"anyOf": [{ "$ref": "#/definitions/commonlayoutattributes" }],
+			"properties":
+			{
+				"LayoutType": { "const": "PictureLayout" },
+				"Width": { "type": "integer" },
+				"Height": { "type": "integer" },
+				"Alignment": { "$ref": "#/definitions/alignment" },
+				"ScaleMode": { "$ref": "#/definitions/scalemode" },
+				"Quality": { "type": "integer" },
+				"Conditions": { "$ref": "#/definitions/conditions" },
+				"PageBreakRules": { "$ref": "#/definitions/pagebreakrules" },
+				"ref": { "type": "string" },
+				"filename": { "type": "string" },
+				"id": { "type": "string" },
+				"parentid": { "type": "string" },
+				"ordinal": { "type": "number" },
+				"name": { "type": "string" },
+				"lineNumber": { "type": "number" },
+				"linePosition": { "type": "number" },
+				"source": { "$ref": "#/definitions/path" },
+				"traceLayout": { "type": "boolean" },
+				"traceText": { "type": "boolean" },
+				"tracePath": { "type": "boolean" },
+				"traceOutline": { "type": "boolean" }
+			},
+			"required": [ "LayoutType" ],
+			"additionalProperties": false
+		},
+		"LineLayout":
+		{
+			"type": "object",
+//			"anyOf": [{ "$ref": "#/definitions/commonlayoutattributes" }],
+			"properties":
+			{
+				"LayoutType": { "const": "LineLayout" },
+				"Style": { "$ref": "#/definitions/linestyle" },
+				"Conditions": { "$ref": "#/definitions/conditions" },
+				"PageBreakRules": { "$ref": "#/definitions/pagebreakrules" },
+				"id": { "type": "string" },
+				"parentid": { "type": "string" },
+				"ordinal": { "type": "number" },
+				"name": { "type": "string" },
+				"lineNumber": { "type": "number" },
+				"linePosition": { "type": "number" },
+				"source": { "$ref": "#/definitions/path" },
+				"traceLayout": { "type": "boolean" },
+				"traceText": { "type": "boolean" },
+				"tracePath": { "type": "boolean" },
+				"traceOutline": { "type": "boolean" }
+			},
+			"required": [ "LayoutType" ],
+			"additionalProperties": false
+		},
+		"SpaceLayout":
+		{
+			"type": "object",
+			"properties":
+			{
+				"LayoutType": { "const": "SpaceLayout" },
+				"Height": { "type": "integer" },
+				"Conditions": { "$ref": "#/definitions/conditions" },
+				"PageBreakRules": { "$ref": "#/definitions/pagebreakrules" },
+//				"anyOf": { "$ref": "#/definitions/commonlayoutattributes" }
+				"id": { "type": "string" },
+				"parentid": { "type": "string" },
+				"ordinal": { "type": "number" },
+				"name": { "type": "string" },
+				"lineNumber": { "type": "number" },
+				"linePosition": { "type": "number" },
+				"source": { "$ref": "#/definitions/path" },
+				"traceLayout": { "type": "boolean" },
+				"traceText": { "type": "boolean" },
+				"tracePath": { "type": "boolean" },
+				"traceOutline": { "type": "boolean" }
+			},
+			"required": [ "LayoutType" ],
+			"additionalProperties": false
+		},
+		"font_def":
+		{
+				"FamilyName": { "type": "string" },
+				"Size": { "type": "integer", "minimum": 0 },
+				"Bold": { "type": "boolean" },
+				"Italic": { "type": "boolean" },
+				"Underline": { "type": "boolean" },
+		},
+		"color_def":
+		{
+				"Red": { "$ref": "#/definitions/ratio"  },
+				"Green": { "$ref": "#/definitions/ratio"  },
+				"Blue": { "$ref": "#/definitions/ratio" },
+		},
+		"border_def":
+		{
+			"type": "object",
+			"properties":
+			{
+				"Stroke":
+				{
+					"type": "object",
+					"properties":
+					{
+						"Thickness": { "type": "integer", "minimum": 1 }
+					}
+				},
+				"Color": { "$ref": "#/definitions/color" },
+				"Parts":
+				{
+					"type": "object",
+					"properties":
+					{
+						"Left": { "type": "boolean" },
+						"Bottom": { "type": "boolean" },
+						"Right": { "type": "boolean" },
+						"Top": { "type": "boolean" },
+						"InnerHorizontal": { "type": "boolean" },
+						"InnerVertical": { "type": "boolean" }
+					}
+				}
+			}
+		},
+		"padding_def":
+		{
+			"type": "object",
+			"properties":
+			{
+				"Left": { "type": "integer" },
+				"Bottom": { "type": "integer" },
+				"Right": { "type": "integer" },
+				"Top": { "type": "integer" }
+			}
+		},
+		"textstyle_def":
+		{
+			"type": "object",
+			"properties":
+			{
+				"Font": { "$ref": "#/definitions/font" },
+				"Color": { "$ref": "#/definitions/color" },
+				"BackColor": { "$ref": "#/definitions/color" },
+				"LineSpacing": { "type": "number" },
+				"ParagraphSpacing": { "type": "number" },
+				"Alignment": { "$ref": "#/definitions/textalignment" },
+				"SoftBreakLimit": { "type": "number" },
+				"Border": { "$ref": "#/definitions/border" },
+				"Padding": { "$ref": "#/definitions/padding" },
+				"ListSeparator": { "type": "string" },
+				"ListTerminator": { "type": "string" }
+			}
+		},
+		"liststyle_def":
+		{
+			"type": "object",
+			"properties":
+			{
+				"BulletStyle": { "$ref": "#/definitions/bulletstyle" },
+				"SelectedBulletStyle": { "$ref": "#/definitions/bulletstyle" },
+				"UnselectedBulletStyle": { "$ref": "#/definitions/bulletstyle" },
+				"ItemStyle": { "$ref": "#/definitions/textstyle" },
+				"ItemIndent": { "type": "integer" },
+				"BulletIndent": { "type": "integer" },
+				"Border": { "$ref": "#/definitions/border" },
+				"Padding": { "$ref": "#/definitions/padding" }
+			}
+		},
+		"bulletstyle_def":
+		{
+			"type": "object",
+			"properties":
+			{
+				"BulletText": { "type": "string" },
+				"NumberStyle": { "$ref": "#/definitions/numberstyle" },
+				"StartAt": { "type": "integer" },
+				"Font": { "$ref": "#/definitions/font" },
+				"Color": { "$ref": "#/definitions/color" },
+				"Padding": { "$ref": "#/definitions/padding" }
+			}
+		},
+		"tablestyle_def":
+		{
+			"type": "object",
+			"properties":
+			{
+				"Border": { "$ref": "#/definitions/border" },
+				"Padding": { "$ref": "#/definitions/padding" }
+			}
+		},
+		"tablerowstyle_def":
+		{
+			"type": "object",
+			"properties":
+			{
+				"Padding": { "$ref": "#/definitions/padding" },
+				"BackColor": { "$ref": "#/definitions/color" }
+			}
+		},
+		"tablecellstyle_def":
+		{
+			"type": "object",
+			"properties":
+			{
+				"Padding": { "$ref": "#/definitions/padding" }
+			}
+		},
+		"photostyle_def":
+		{
+			"type": "object",
+			"properties":
+			{
+				"CaptionStyle": { "$ref": "#/definitions/textstyle" },
+				"Border": { "$ref": "#/definitions/border" },
+				"Padding": { "$ref": "#/definitions/padding" },
+				"MaxWidth": { "type": "integer", "minimum": 1 },
+				"MaxHeight": { "type": "integer", "minimum": 1 },
+				"Resolution": { "type": "integer", "minimum": 1 },
+				"Quality": { "type": "integer" }
+			}
+		},
+		"linestyle_def":
+		{
+			"type": "object",
+			"properties":
+			{
+				"Thickness": { "type": "integer" },
+				"Color": { "$ref": "#/definitions/color" },
+				"Padding": { "$ref": "#/definitions/padding" }
+			}
+		},
+		"font_shared":
+		{
+			"type": "object",
+			"properties":
+			{
+				"anyOf": { "$ref": "#/definitions/font_def" },
+				"id": { "type": "string" },
+				"isDefault": { "type": "boolean" }
+			}
+		},
+		"color_shared":
+		{
+			"type": "object",
+			"properties":
+			{
+				"anyOf": { "$ref": "#/definitions/color_def" },
+				"id": { "type": "string" },
+				"isDefault": { "type": "boolean" }
+			}
+		},
+		"border_shared":
+		{
+			"type": "object",
+			"properties":
+			{
+				"anyOf": { "$ref": "#/definitions/border_def" },
+				"id": { "type": "string" },
+				"isDefault": { "type": "boolean" }
+			}
+		},
+		"padding_shared":
+		{
+			"type": "object",
+			"properties":
+			{
+				"anyOf": { "$ref": "#/definitions/padding_def" },
+				"id": { "type": "string" },
+				"isDefault": { "type": "boolean" }
+			}
+		},
+		"textstyle_shared":
+		{
+			"type": "object",
+			"properties":
+			{
+				"anyOf": { "$ref": "#/definitions/textstyle_def" },
+				"id": { "type": "string" },
+				"isDefault": { "type": "boolean" }
+			}
+		},
+		"liststyle_shared":
+		{
+			"type": "object",
+			"properties":
+			{
+				"anyOf": { "$ref": "#/definitions/liststyle_def" },
+				"id": { "type": "string" },
+				"isDefault": { "type": "boolean" }
+			}
+		},
+		"bulletstyle_shared":
+		{
+			"type": "object",
+			"properties":
+			{
+				"anyOf": { "$ref": "#/definitions/bulletstyle_def" },
+				"id": { "type": "string" },
+				"isDefault": { "type": "boolean" }
+			}
+		},
+		"tablestyle_shared":
+		{
+			"type": "object",
+			"properties":
+			{
+				"anyOf": { "$ref": "#/definitions/tablestyle_def" },
+				"id": { "type": "string" },
+				"isDefault": { "type": "boolean" }
+			}
+		},
+		"tablerowstyle_shared":
+		{
+			"type": "object",
+			"properties":
+			{
+				"anyOf": { "$ref": "#/definitions/tablerowstyle_def" },
+				"id": { "type": "string" },
+				"isDefault": { "type": "boolean" }
+			}
+		},
+		"tablecellstyle_shared":
+		{
+			"type": "object",
+			"properties":
+			{
+				"anyOf": { "$ref": "#/definitions/tablecellstyle_def" },
+				"id": { "type": "string" },
+				"isDefault": { "type": "boolean" }
+			}
+		},
+		"photostyle_shared":
+		{
+			"type": "object",
+			"properties":
+			{
+				"anyOf": { "$ref": "#/definitions/photostyle_def" },
+				"id": { "type": "string" },
+				"isDefault": { "type": "boolean" }
+			}
+		},
+		"linestyle_shared":
+		{
+			"type": "object",
+			"properties":
+			{
+				"anyOf": { "$ref": "#/definitions/linestyle_def" },
+				"id": { "type": "string" },
+				"isDefault": { "type": "boolean" }
+			}
+		},
+		"font":
+		{
+			"type": "object",
+			"properties":
+			{
+				"anyOf": { "$ref": "#/definitions/font_def" },
+				"ref": { "type": "string" }
+			}
+		},
+		"color":
+		{
+			"type": "object",
+			"properties":
+			{
+				"anyOf": { "$ref": "#/definitions/color_def" },
+				"ref": { "type": "string" }
+			}
+		},
+		"border":
+		{
+			"type": "object",
+			"properties":
+			{
+				"anyOf": { "$ref": "#/definitions/border_def" },
+				"ref": { "type": "string" }
+			}
+		},
+		"padding":
+		{
+			"type": "object",
+			"properties":
+			{
+				"anyOf": { "$ref": "#/definitions/padding_def" },
+				"ref": { "type": "string" }
+			}
+		},
+		"textstyle":
+		{
+			"type": "object",
+			"properties":
+			{
+				"anyOf": { "$ref": "#/definitions/textstyle_def" },
+				"ref": { "type": "string" }
+			}
+		},
+		"liststyle":
+		{
+			"type": "object",
+			"properties":
+			{
+				"anyOf": { "$ref": "#/definitions/liststyle_def" },
+				"ref": { "type": "string" }
+			}
+		},
+		"bulletstyle":
+		{
+			"type": "object",
+			"properties":
+			{
+				"anyOf": { "$ref": "#/definitions/bulletstyle_def" },
+				"ref": { "type": "string" }
+			}
+		},
+		"tablestyle":
+		{
+			"type": "object",
+			"properties":
+			{
+				"anyOf": { "$ref": "#/definitions/tablestyle_def" },
+				"ref": { "type": "string" }
+			}
+		},
+		"tablerowstyle":
+		{
+			"type": "object",
+			"properties":
+			{
+				"anyOf": { "$ref": "#/definitions/tablerowstyle_def" },
+				"ref": { "type": "string" }
+			}
+		},
+		"tablecellstyle":
+		{
+			"type": "object",
+			"properties":
+			{
+				"anyOf": { "$ref": "#/definitions/tablecellstyle_def" },
+				"ref": { "type": "string" }
+			}
+		},
+		"photostyle":
+		{
+			"type": "object",
+			"properties":
+			{
+				"anyOf": { "$ref": "#/definitions/photostyle_def" },
+				"ref": { "type": "string" }
+			}
+		},
+		"linestyle":
+		{
+			"type": "object",
+			"properties":
+			{
+				"anyOf": { "$ref": "#/definitions/linestyle_def" },
+				"ref": { "type": "string" }
+			}
+		},
+		"styles":
+		{
+			"type": "object",
+			"properties":
+			{
+				"Fonts": { "type": "array", "items": { "$ref": "#/definitions/font_shared" } },
+				"Colors": { "type": "array", "items": { "$ref": "#/definitions/color_shared" } },
+				"Borders": { "type": "array", "items": { "$ref": "#/definitions/border_shared" } },
+				"Paddings": { "type": "array", "items": { "$ref": "#/definitions/padding_shared" } },
+				"TextStyles": { "type": "array", "items": { "$ref": "#/definitions/textstyle_shared" } },
+				"ListStyles": { "type": "array", "items": { "$ref": "#/definitions/liststyle_shared" } },
+				"PhotoStyles": { "type": "array", "items": { "$ref": "#/definitions/photostyle_shared" } },
+				"TableStyles": { "type": "array", "items": { "$ref": "#/definitions/tablestyle_shared" } },
+				"TableRowStyles": { "type": "array", "items": { "$ref": "#/definitions/tablerowstyle_shared" } },
+				"TableCellStyles": { "type": "array", "items": { "$ref": "#/definitions/tablecellstyle_shared" } },
+				"BulletStyles": { "type": "array", "items": { "$ref": "#/definitions/bulletstyle_shared" } },
+				"LineStyles": { "type": "array", "items": { "$ref": "#/definitions/linestyle_shared" } }
+			}
+		},
+		"conditions":
+		{
+			"type": "array",
+			"items":
+			{
+				"anyOf":
+				[
+					{
+						"type": "object",
+						"properties":
+						{
+							"ConditionType": { "const": "EmptyLayoutCondition" },
+							"context": { "type": "integer" },
+							"refId": { "type": "string" },
+							"refType": { "type": "string" },
+							"Require": { "type": "boolean" },
+							"Prohibit": { "type": "boolean" }
+						}
+					},
+					{
+						"type": "object",
+						"properties":
+						{
+							"ConditionType": { "const": "OptionSelectedCondition" },
+							"source": { "$ref": "#/definitions/path" },
+							"Require": { "type": "boolean" },
+							"Prohibit": { "type": "boolean" }
+						}
+					},
+					{
+						"type": "object",
+						"properties":
+						{
+							"ConditionType": { "const": "ContentSelectedCondition" },
+							"Require": { "type": "boolean" },
+							"Prohibit": { "type": "boolean" }
+						}
+					},
+					{
+						"type": "object",
+						"properties":
+						{
+							"ConditionType": { "const": "DocTagCondition" },
+							"source": { "$ref": "#/definitions/path" },
+							"tag": { "type": "string" },
+							"Require": { "type": "boolean" },
+							"Prohibit": { "type": "boolean" }
+						}
+					},
+					{
+						"type": "object",
+						"properties":
+						{
+							"ConditionType": { "const": "ContentDocTagCondition" },
+							"tag": { "type": "string" },
+							"Require": { "type": "boolean" },
+							"Prohibit": { "type": "boolean" }
+						}
+					},
+					{
+						"type": "object",
+						"properties":
+						{
+							"ConditionType": { "const": "ItemCountCondition" },
+							"context": { "type": "integer" },
+							"refId": { "type": "string" },
+							"refType": { "type": "string" },
+							"source": { "$ref": "#/definitions/path" },
+							"Minimum": { "type": "integer", "minimum": 0 },
+							"Maximum": { "type": "integer", "minimum": 0 }
+						}
+					},
+					{
+						"type": "object",
+						"properties":
+						{
+							"ConditionType": { "const": "PhotoCountCondition" },
+							"context": { "type": "integer" },
+							"refId": { "type": "string" },
+							"refType": { "type": "string" },
+							"source": { "$ref": "#/definitions/path" },
+							"Minimum": { "type": "integer", "minimum": 0 },
+							"Maximum": { "type": "integer", "minimum": 0 }
+						}
+					}
+				]
+			}
+		},
+		"pagebreakrules":
+		{
+			"type": "object",
+			"properties":
+			{
+				"NewPage": { "type": "boolean" },
+				"KeepWithNext": { "type": "boolean" },
+				"MaxPosition": { "$ref": "#/definitions/ratio" },
+				"MinLines": { "type": "integer", "minimum": 0 }
+			},
+		},
+		"fixed_picture":
+		{
+			"type": "object",
+			"properties":
+			{
+				"Left": { "type": "integer" },
+				"Bottom": { "type": "integer" },
+				"Right": { "type": "integer" },
+				"Top": { "type": "integer" },
+				"Alignment": { "$ref": "#/definitions/alignment" },
+				"ScaleMode": { "$ref": "#/definitions/scalemode" },
+				"Quality": { "type": "integer" },
+				"ref": { "type": "string" },
+				"filename": { "type": "string" }
+			}
+		},
+		"resources":
+		{
+			"type": "array",
+			"items":
+			{
+				"type": "object",
+				"properties":
+				{
+					"id": { "type": "string" },
+					"Filename": { "type": "string" }
+				},
+				"additionalProperties": false
+			}
+		},
+		"rectangle":
+		{
+			"type": "object",
+			"properties":
+			{
+				"left": { "type": "integer" },
+				"bottom": { "type": "integer" },
+				"right": { "type": "integer" },
+				"top": { "type": "integer" }
+			}
+		},
+		"termdictionary":
+		{
+			"type": "array",
+			"items":
+			{
+				"type": "object",
+				"patternProperties":
+				{
+					".*": { "type": "string" }
+				},
+				"minProperties": 1,
+				"maxProperties": 1
+			}
+		},
+		"ratio":
+		{
+			"type": "number",
+			"minimum": 0.0,
+			"maximum": 1.0
+		},
+		"id":
+		{
+			"type": "string",
+			"pattern": "^[0-9a-f]{32}$"
+		},
+		"path":
+		{
+			"type": "string",
+			"pattern": "[.$]?(/?[+-]?[0-9]*:?[a-zA-Z]+:[a-f0-9]{32})?(/[+-]?[0-9]*:?[a-zA-Z]+:[a-f0-9]{32})*(![a-zA-Z]+(:.*)?)?"
+		},
+		"alignment":
+		{
+			"enum":
+			[
+				"TopLeft", "TopCenter", "TopRight",
+				"CenterLeft", "Center", "CenterRight",
+				"BottomLeft", "BottomCenter", "BottomRight"
+			]
+		},
+		"textalignment":
+		{
+			"enum": [ "Left", "Right", "Center", "Justify" ]
+		},
+		"scalemode":
+		{
+			"enum": [ "NaturalSize", "ScaleDown" ]
+		},
+		"numberstyle":
+		{
+			"enum": [ "Bullet", "Number", "AlphaLower", "AlphaUpper", "RomanLower", "RomanUpper", "GreekLower", "GreekUpper" ]
+		}
+	},
+	"type": "object",
+	"properties":
+	{
+		"id": { "type": "string", "pattern": "^[0-9a-f]{32}$" },
+		"name": { "type": "string" },
+		"inspectionTemplateId": { "type": "string", "pattern": "^[0-9a-f]{32}$" },
+		"fileFormatVersion": { "type": "integer" },
+		"Layouts":
+		{
+			"type": "array",
+			"items": { "$ref": "#/definitions/ChapterLayout" }
+		},
+		"Styles": { "$ref": "#/definitions/styles" },
+		"Resources": { "$ref": "#/definitions/resources" }
+	},
+	"requiredProperties":
+		[ "id", "name", "inspectionTemplateId", "fileFormatVersion", "Layouts" ],
+	"additionalProperties": false
+}
+

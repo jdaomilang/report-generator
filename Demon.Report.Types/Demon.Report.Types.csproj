@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>Demon.Report.Types</AssemblyName>
+    <RootNamespace>Demon.Report.Types</RootNamespace>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DebugType>full</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Demon.Core\Demon.Core.csproj" />
+    <ProjectReference Include="..\Demon.Data\Demon.Data.csproj" />
+    <ProjectReference Include="..\Demon.Font\Demon.Font.csproj" />
+    <ProjectReference Include="..\Demon.Path\Demon.Path.csproj" />
+  </ItemGroup>
+
+</Project>
